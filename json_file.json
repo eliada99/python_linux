@@ -1,0 +1,31 @@
+	"setup":
+	{
+		"server":
+		{
+			"mandatory" : "yes",
+			"type" : "text",
+			"comment" :" (Aux server ip) or ip of server  Mandatory field",
+			"default" :"pxehp88"
+		},
+		"server_bluefield":
+		{
+			"mandatory" : "yes",
+			"type" : "text",
+			"comment" :" client arm usb interface ip - you must verify that you can enter to this ip from the client_ip (usb-host) Optional field",
+			"default" :"192.168.100.2"
+		}
+		"client":
+		{
+			"mandatory" : "yes",
+			"type" : "text",
+			"comment" :" (DUT ip) or ip of (usb-host of smartnic - where usb interface configured) client Mandatory field",
+			"default" :"bfdell01"
+		},
+		"client_bluefield":
+		{
+			"mandatory" : "yes",
+			"type" : "text",
+			"comment" :" client arm usb interface ip - you must verify that you can enter to this ip from the client_ip (usb-host) Optional field",
+			"default" :"192.168.100.2"
+		}
+	}
