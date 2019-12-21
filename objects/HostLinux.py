@@ -5,6 +5,7 @@ import rpyc
 import subprocess
 
 from modules import sshParamiko, utilities
+from rpycRemoteConnection import rpycRemoteConnection
 
 VER_TOOLS_PATH = '/mswg/projects/ver_tools/reg2_latest/install.sh'
 sys.path.append(path.dirname(path.dirname(path.abspath(__file__))))
@@ -15,7 +16,11 @@ class HostLinux:
         print ("------------------------------------------")
         utilities.reporter("Start to build host_linux object of host: " + host_ip, 'blue')
         self.last_output = None
-        conn = self.reconnect_to_host(host_ip)
+        remote = rpycRemoteConnection()
+        conn   = remote.connect(host_ip)
+        self.machine_type = conn.modules.platform.system()
+
+        #conn = self.reconnect_to_host(host_ip)
         self.conn = None if conn is None else conn
 
         if not self.run_cmd("mst start", 0, 1):
@@ -45,6 +50,9 @@ class HostLinux:
 
     def get_ip(self):
         return self.ip
+
+    def get_machine_type(self):
+        return self.machine_type
 
     def get_hostname(self):
         return self.hostname
@@ -88,19 +96,6 @@ class HostLinux:
     # Setters methods
     def set_last_output(self, last_output):
         self.last_output = last_output
-
-    # connect/reconnect to your host
-    def reconnect_to_host(self, ip):
-        var = None
-        try:
-            conn = rpyc.classic.connect(ip)
-            return conn
-        except:
-            if not var:
-                var = sshParamiko.ssh_command(str(ip), VER_TOOLS_PATH)
-                self.reconnect_to_host(ip)   # --> a little bit dangerous .... ???!
-            utilities.reporter("No connection to host: " + self.get_ip() + "!", 'red')
-            return None
 
     # run command RPyC:
     # In
