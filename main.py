@@ -51,7 +51,7 @@ def usage():
     exit(2)  # close the app
 
 
-# ---------- End of SomeThread class ----------
+# ---------- Main code ----------
 if __name__ == '__main__':
     if re.findall(r'-h|--help|\?', sys.argv[1]):
         usage()
