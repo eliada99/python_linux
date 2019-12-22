@@ -41,15 +41,5 @@ class HostInterfaceEth:
 
     # Setters methods
 
-    # print object attributes
-    def print_content(self):
-        utilities.reporter("Printing the attributes of Host_linux Object:", 'bold')
-        try:
-            print ("Host Name:     " + self.get_ip() + "\n" +
-                   "MST Device:    " + self.get_mst_device() + "\n" +
-                   "FW Version:    " + self.get_fw() + "\n" +
-                   "PCI:           " + self.get_pci() + "\n" +
-                   "------------------------------------------\n")
-        except:
-            print("Fail to print the object attributes!\n" +
-                  "------------------------------------------\n")
+    def __str__(self):
+        return str(self.__class__) + ": " + str(self.__dict__)
