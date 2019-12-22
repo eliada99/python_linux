@@ -53,18 +53,5 @@ class HostHca:
 
     # Setters methods
 
-    # print object attributes
-    def print_content(self):
-        utilities.reporter("Printing the attributes of Host_linux Object:", 'bold')
-        try:
-            print ("MST Device:    " + self.get_mst_device() + "\n" +
-                   "FW Version:    " + self.get_fw() + "\n" +
-                   "Rom Info:      " + self.get_exp_rom() + "\n" +
-                   "PCI:           " + self.get_pci() + "\n" +
-                   "Board Id:      " + self.get_board_id() + "\n" +
-                   "Part Number:   " + self.get_part_number() + "\n" +
-                   "PSID:          " + self.get_hca_pid() + "\n" +
-                   "------------------------------------------\n")
-        except:
-            print("Fail to print the object attributes!\n" +
-                  "------------------------------------------\n")
+    def __str__(self):
+        return str(self.__class__) + ": " + str(self.__dict__)
