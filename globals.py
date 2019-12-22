@@ -22,8 +22,8 @@ def init():
 
     hostLinuxServer = objects_list[0]
     hostLinuxClient = objects_list[1]
-    serverInterfaceEth1 = HostInterfaceEth(hostLinuxServer, "eth2")
-    serverInterfaceEth2 = HostInterfaceEth(hostLinuxServer, "eth3")
+    serverInterfaceEth1 = HostInterfaceEth(hostLinuxServer, "eth4")
+    serverInterfaceEth2 = HostInterfaceEth(hostLinuxServer, "eth5")
     clientInterfaceEth1 = HostInterfaceEth(hostLinuxClient, "eth4")
     clientInterfaceEth2 = HostInterfaceEth(hostLinuxClient, "eth5")
     serverHca = HostHca(hostLinuxServer, serverInterfaceEth1, serverInterfaceEth2)
@@ -37,8 +37,8 @@ class SomeThread(threading.Thread):
         try:
             threading.Thread.__init__(self)  # create Thread object
             self.ip = ip
-        except:
-            raise Exception("Thread fail:" + ip)
+        except Exception as err:
+            raise Exception("Thread fail:" + ip + " " + err)
 
     def run(self):
         self.instance = HostLinux(self.ip)
