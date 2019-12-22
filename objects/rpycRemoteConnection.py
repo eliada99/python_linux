@@ -18,7 +18,7 @@ class rpycRemoteConnection(object):
             conn = rpyc.classic.connect(ip)
             return conn
         except Exception as err:
-            rpycRemoteConnection.recCounter = rpycRemoteConnection.recCounter + 1
+            ++rpycRemoteConnection.recCounter
             sshParamiko.ssh_command(str(ip), VER_TOOLS_PATH)
             return self.connect(ip)  # recursion, it is a good day to die
 
