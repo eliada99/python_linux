@@ -4,7 +4,7 @@ import re
 import subprocess
 
 from modules import utilities
-from rpycRemoteConnection import rpycRemoteConnection
+from RemoteConnection import RemoteConnection
 
 VER_TOOLS_PATH = '/mswg/projects/ver_tools/reg2_latest/install.sh'
 sys.path.append(path.dirname(path.dirname(path.abspath(__file__))))
@@ -15,7 +15,7 @@ class HostLinux:
         print ("------------------------------------------")
         utilities.reporter("Start to build host_linux object of host: " + host_ip, 'blue')
         self.last_output = None
-        remote = rpycRemoteConnection()
+        remote = RemoteConnection()
         conn = remote.connect(host_ip)
         self.conn = None if conn is None else conn
         self.machine_type = conn.modules.platform.system()  # Returns the system/OS name, e.g. 'Linux', 'Windows'
@@ -25,23 +25,19 @@ class HostLinux:
         self.linux_distribution = conn.modules.platform.linux_distribution()[0] # 'Red Hat Enterprise Linux Server'
         self.ip = host_ip
 
-        if not self.run_cmd("mst start", 0, 1):
-            utilities.reporter("Fail to start the driver: \"mst start\"", 'red')
-            return None
-
-        self.ofed_info = self.run_cmd("ofed_info -s", r'\w+\-(\d\.\d\-\d\.\d\.\d+\.\d)', 1)
-        self.mst_version = self.run_cmd("mst version", r'mst\W+mft\s(\d\.\d+\.\d\-\d+).*', 1)
-        self.mst_device = self.run_cmd("mst status -v", r'\W+(/dev/mst/mt\d+\_\w+\d).*', 1)
-        mstDevice = self.get_mst_device().lstrip()
-        self.fw = self.run_cmd("flint -d " + mstDevice + " q | grep -i fw | grep -i version",
-                               r'FW\sVersion\:\s+(\d{2}\.\d{2}\.\d{4})', 1)
-        self.exp_rom = self.run_cmd("flint -d " + mstDevice + " q | grep -i rom", r'Rom\sInfo\:\s+(.*)', 1)
-        self.pci = self.run_cmd("lspci | grep -i mellanox", r'^(\w{2}\:\d{2}\.\d).*', 1)
-        self.driver_mlx = self.run_cmd("mst status -v | grep -i " + mstDevice, r'.*(mlx\d\_0)\s+net-\w+\s+', 1)
-        self.connect_x = self.run_cmd("mst status -v | grep -i " + mstDevice, r'(\w+\d?)\(rev:\d+\).*', 1)
-        self.board_details = self.run_cmd('mlxburn -d ' + mstDevice + ' -vpd', r'.*Board\sId\s+(.*)', 1)
-        self.part_number = self.run_cmd('mlxburn -d ' + mstDevice + ' -vpd', r'.*Part\sNumber\s+(\w+-\w+)\s+.*', 1)
-        self.hca_pid = self.run_cmd('flint -d ' + mstDevice + ' q', r'.*PSID:\s+(.*)', 1)
+        dictionary_data = self.collect_host_data()
+        self.ofed_info = dictionary_data['ofed_info']
+        self.mst_version = dictionary_data['mst_version']
+        self.mst_device = dictionary_data['mst_device']
+        self.fw =   dictionary_data['fw']
+        self.exp_rom = dictionary_data['exp_rom']
+        self.pci = dictionary_data['pci']
+        self.driver_mlx = dictionary_data['driver_mlx']
+        self.connect_x = dictionary_data['connect_x']
+        self.board_details = dictionary_data['board_details']
+        self.part_number = dictionary_data['part_number']
+        self.hca_pid = dictionary_data['hca_pid']
+        print self
 
     # Getters methods
     def get_conn(self):
@@ -105,8 +101,7 @@ class HostLinux:
     def set_last_output(self, last_output):
         self.last_output = last_output
 
-    # run command RPyC:
-    # In
+    # run command def
     # with/without regex to pull only the needed output
     # with/without return value
     def run_cmd(self, cmd, reg, return_value=0, timeout=60):
@@ -136,21 +131,25 @@ class HostLinux:
         # if cmdStatus: return None
         if return_value: return stdout
 
-    # print object attributes
-    def print_content(self):
-        utilities.reporter("Printing the attributes of Host_linux Object:", 'bold')
-        try:
-            print ("Host Name:     " + self.get_ip() + "\n" +
-                   "Ofed Info:     " + self.get_ofed_info() + "\n" +
-                   "MST Version:   " + self.get_mst_version() + "\n" +
-                   "MST Device:    " + self.get_mst_device() + "\n" +
-                   "FW Version:    " + self.get_fw() + "\n" +
-                   "Rom Info:      " + self.get_exp_rom() + "\n" +
-                   "PCI:           " + self.get_pci() + "\n" +
-                   "Board Id:      " + self.get_board_id() + "\n" +
-                   "Part Number:   " + self.get_part_number() + "\n" +
-                   "PSID:          " + self.get_psid() + "\n" +
-                   "------------------------------------------\n")
-        except:
-            print("Fail to print the object attributes!\n" +
-                  "------------------------------------------\n")
+    def collect_host_data(self):
+        if not self.run_cmd("mst start", 0, 1):
+            utilities.reporter("Fail to start the driver: \"mst start\"", 'red')
+            return None
+        d = {}
+        d['ofed_info'] = self.run_cmd("ofed_info -s", r'\w+\-(\d\.\d\-\d\.\d\.\d+\.\d)', 1)
+        d['mst_version'] = self.run_cmd("mst version", r'mst\W+mft\s(\d\.\d+\.\d\-\d+).*', 1)
+        d['mst_device'] = self.run_cmd("mst status -v", r'\W+(/dev/mst/mt\d+\_\w+\d).*', 1)
+        mstDevice = d['mst_device'].lstrip()
+        d['fw'] = self.run_cmd("flint -d " + mstDevice + " q | grep -i fw | grep -i version",
+                               r'FW\sVersion\:\s+(\d{2}\.\d{2}\.\d{4})', 1)
+        d['exp_rom'] = self.run_cmd("flint -d " + mstDevice + " q | grep -i rom", r'Rom\sInfo\:\s+(.*)', 1)
+        d['pci'] = self.run_cmd("lspci | grep -i mellanox", r'^(\w{2}\:\d{2}\.\d).*', 1)
+        d['driver_mlx'] = self.run_cmd("mst status -v | grep -i " + mstDevice, r'.*(mlx\d\_0)\s+net-\w+\s+', 1)
+        d['connect_x'] = self.run_cmd("mst status -v | grep -i " + mstDevice, r'(\w+\d?)\(rev:\d+\).*', 1)
+        d['board_details'] = self.run_cmd('mlxburn -d ' + mstDevice + ' -vpd', r'.*Board\sId\s+(.*)', 1)
+        d['part_number'] = self.run_cmd('mlxburn -d ' + mstDevice + ' -vpd', r'.*Part\sNumber\s+(\w+-\w+)\s+.*', 1)
+        d['hca_pid'] = self.run_cmd('flint -d ' + mstDevice + ' q', r'.*PSID:\s+(.*)', 1)
+        return d
+
+    def __str__(self):
+        return str(self.__class__) + ": " + str(self.__dict__)
