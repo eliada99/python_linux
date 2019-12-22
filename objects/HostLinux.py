@@ -1,10 +1,9 @@
 #!/usr/bin/python
 from os import sys, path
 import re
-import rpyc
 import subprocess
 
-from modules import sshParamiko, utilities
+from modules import utilities
 from rpycRemoteConnection import rpycRemoteConnection
 
 VER_TOOLS_PATH = '/mswg/projects/ver_tools/reg2_latest/install.sh'
@@ -17,32 +16,32 @@ class HostLinux:
         utilities.reporter("Start to build host_linux object of host: " + host_ip, 'blue')
         self.last_output = None
         remote = rpycRemoteConnection()
-        conn   = remote.connect(host_ip)
-        self.machine_type = conn.modules.platform.system()
-
-        #conn = self.reconnect_to_host(host_ip)
+        conn = remote.connect(host_ip)
         self.conn = None if conn is None else conn
+        self.machine_type = conn.modules.platform.system()  # Returns the system/OS name, e.g. 'Linux', 'Windows'
+        self.processor_name = conn.modules.platform.processor()  # Returns the processor name, e.g. 'amdk6' / 'x86_64'
+        self.hostname = conn.modules.platform.node()             # returns the host name, e. g 'bfhp12'
+        self.os_details = conn.modules.platform.platform(aliased=0, terse=0) # 'Linux-3.10.0-693.el7.x86_64-x86_64-with-redhat-7.4-Maipo'
+        self.linux_distribution = conn.modules.platform.linux_distribution()[0] # 'Red Hat Enterprise Linux Server'
+        self.ip = host_ip
 
         if not self.run_cmd("mst start", 0, 1):
             utilities.reporter("Fail to start the driver: \"mst start\"", 'red')
             return None
 
-
-        self.ip            = host_ip
-        self.hostname      = self.run_cmd("hostname", 0, 1)
-        self.ofed_info     = self.run_cmd("ofed_info -s", r'\w+\-(\d\.\d\-\d\.\d\.\d+\.\d)', 1)
-        self.mst_version   = self.run_cmd("mst version", r'mst\W+mft\s(\d\.\d+\.\d\-\d+).*', 1)
-        self.mst_device    = self.run_cmd("mst status -v", r'\W+(/dev/mst/mt\d+\_\w+\d).*', 1)
-        mstDevice          = self.get_mst_device().lstrip()
-        self.fw            = self.run_cmd("flint -d " + mstDevice + " q | grep -i fw | grep -i version",
-                                           r'FW\sVersion\:\s+(\d{2}\.\d{2}\.\d{4})', 1)
-        self.exp_rom       = self.run_cmd("flint -d " + mstDevice + " q | grep -i rom", r'Rom\sInfo\:\s+(.*)', 1)
-        self.pci           = self.run_cmd("lspci | grep -i mellanox", r'^(\w{2}\:\d{2}\.\d).*', 1)
-        self.driver_mlx    = self.run_cmd("mst status -v | grep -i " + mstDevice, r'.*(mlx\d\_0)\s+net-\w+\s+', 1)
-        self.connect_x     = self.run_cmd("mst status -v | grep -i " + mstDevice, r'(\w+\d?)\(rev:\d+\).*', 1)
+        self.ofed_info = self.run_cmd("ofed_info -s", r'\w+\-(\d\.\d\-\d\.\d\.\d+\.\d)', 1)
+        self.mst_version = self.run_cmd("mst version", r'mst\W+mft\s(\d\.\d+\.\d\-\d+).*', 1)
+        self.mst_device = self.run_cmd("mst status -v", r'\W+(/dev/mst/mt\d+\_\w+\d).*', 1)
+        mstDevice = self.get_mst_device().lstrip()
+        self.fw = self.run_cmd("flint -d " + mstDevice + " q | grep -i fw | grep -i version",
+                               r'FW\sVersion\:\s+(\d{2}\.\d{2}\.\d{4})', 1)
+        self.exp_rom = self.run_cmd("flint -d " + mstDevice + " q | grep -i rom", r'Rom\sInfo\:\s+(.*)', 1)
+        self.pci = self.run_cmd("lspci | grep -i mellanox", r'^(\w{2}\:\d{2}\.\d).*', 1)
+        self.driver_mlx = self.run_cmd("mst status -v | grep -i " + mstDevice, r'.*(mlx\d\_0)\s+net-\w+\s+', 1)
+        self.connect_x = self.run_cmd("mst status -v | grep -i " + mstDevice, r'(\w+\d?)\(rev:\d+\).*', 1)
         self.board_details = self.run_cmd('mlxburn -d ' + mstDevice + ' -vpd', r'.*Board\sId\s+(.*)', 1)
-        self.part_number   = self.run_cmd('mlxburn -d ' + mstDevice + ' -vpd', r'.*Part\sNumber\s+(\w+-\w+)\s+.*', 1)
-        self.hca_pid       = self.run_cmd('flint -d ' + mstDevice + ' q', r'.*PSID:\s+(.*)', 1)
+        self.part_number = self.run_cmd('mlxburn -d ' + mstDevice + ' -vpd', r'.*Part\sNumber\s+(\w+-\w+)\s+.*', 1)
+        self.hca_pid = self.run_cmd('flint -d ' + mstDevice + ' q', r'.*PSID:\s+(.*)', 1)
 
     # Getters methods
     def get_conn(self):
@@ -53,6 +52,15 @@ class HostLinux:
 
     def get_machine_type(self):
         return self.machine_type
+
+    def get_processor_name(self):
+        return self.processor_name
+
+    def get_os_details(self):
+        return self.os_details
+
+    def get_linux_distribution(self):
+        return self.linux_distribution
 
     def get_hostname(self):
         return self.hostname
@@ -102,11 +110,14 @@ class HostLinux:
     # with/without regex to pull only the needed output
     # with/without return value
     def run_cmd(self, cmd, reg, return_value=0, timeout=60):
-        if hasattr(self, 'hostname'): host = self.get_hostname()
-        else:                         host = "No Name Yet"
-        utilities.reporter("Function: HostLinux.run_cmd, Object: HostLinux: " + host + "\nCommand: " + cmd + "\n", 'green')
+        if hasattr(self, 'hostname'):
+            host = self.get_hostname()
+        else:
+            host = "No Name Yet"
+        utilities.reporter("Function: HostLinux.run_cmd, Object: HostLinux: " + host + "\nCommand: " + cmd + "\n",
+                           'green')
         proc = self.conn.modules.subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-                                                 universal_newlines=True)
+                                                  universal_newlines=True)
         stdout, stderr = proc.communicate()
 
         if stderr:
@@ -122,7 +133,7 @@ class HostLinux:
             except:
                 utilities.reporter("Host: " + self.get_hostname() + "Command Fail: " + cmd + "\n" + stdout, 'red')
                 return None
-        #if cmdStatus: return None
+        # if cmdStatus: return None
         if return_value: return stdout
 
     # print object attributes
