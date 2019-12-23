@@ -1,31 +1,52 @@
-	"setup":
-	{
-		"server":
-		{
-			"mandatory" : "yes",
-			"type" : "text",
-			"comment" :" (Aux server ip) or ip of server  Mandatory field",
-			"default" :"pxehp88"
+{
+	"setup": {
+		"server": {
+			"mandatory": "yes",
+			"type": "text",
+			"comment": " hostname or ip of server  Mandatory field",
+			"value": "bfhp11"
 		},
-		"server_bluefield":
-		{
-			"mandatory" : "yes",
-			"type" : "text",
-			"comment" :" client arm usb interface ip - you must verify that you can enter to this ip from the client_ip (usb-host) Optional field",
-			"default" :"192.168.100.2"
-		}
-		"client":
-		{
-			"mandatory" : "yes",
-			"type" : "text",
-			"comment" :" (DUT ip) or ip of (usb-host of smartnic - where usb interface configured) client Mandatory field",
-			"default" :"bfdell01"
+		"server_pci": {
+			"mandatory": "yes",
+			"type": "text",
+			"comment": " ",
+			"value": "07:00.0,07:00.1"
 		},
-		"client_bluefield":
-		{
-			"mandatory" : "yes",
-			"type" : "text",
-			"comment" :" client arm usb interface ip - you must verify that you can enter to this ip from the client_ip (usb-host) Optional field",
-			"default" :"192.168.100.2"
+		"server_interfaces": {
+			"mandatory": "yes",
+			"type": "text",
+			"comment": "",
+			"value": "eth4,eth5"
+		},
+		"server_bluefield": {
+			"mandatory": "yes",
+			"type": "text",
+			"comment": "",
+			"value": ""
+		},
+		"client": {
+			"mandatory": "yes",
+			"type": "text",
+			"comment": " ",
+			"value": "bfhp12"
+		},
+		"client_pci": {
+			"mandatory": "yes",
+			"type": "text",
+			"comment": " ",
+			"value": "11:00.0,11:00.1"
+		},
+		"client_interfaces": {
+			"mandatory": "yes",
+			"type": "text",
+			"comment": " ",
+			"value": "eth4,eth5"
+		},
+		"client_bluefield": {
+			"mandatory": "yes",
+			"type": "text",
+			"comment": " client arm usb interface ip - you must verify that you can enter to this ip from the client_ip (usb-host) Optional field",
+			"value": "192.168.100.2"
 		}
 	}
+}

@@ -1,31 +1,42 @@
 #!/usr/bin/python
 import sys
 import threading  # https://docs.python.org/2/library/threading.html
+import json
 
 from objects.HostLinux import HostLinux
 from objects.HostInterfaceEth import HostInterfaceEth
 from objects.HostHca import HostHca
 
+JSON_FILE = "json_file.json"
 
-'''this file is saving the main globals parameters in my project'''
+'''This file is saving the mainly globals parameters in my project'''
 
 
 def init():
-    # save objects - should be in globals
+    # save objects as globals for all project
     global hostLinuxServer, hostLinuxClient, serverInterfaceEth1, serverInterfaceEth2
     global clientInterfaceEth1, clientInterfaceEth2, serverHca, clientHca, setupObjTuple
-
     objects_list = []
-    setup = create_objects_in_parallel()
+
+    with open(JSON_FILE) as f:
+        json_file = json.load(f)
+        f.close()
+
+    setup = create_objects_in_parallel(json_file["setup"]["server"]["value"], json_file["setup"]["client"]["value"])
     for i in setup:
         objects_list.append(i.instance)
 
     hostLinuxServer = objects_list[0]
     hostLinuxClient = objects_list[1]
-    serverInterfaceEth1 = HostInterfaceEth(hostLinuxServer, "eth4")
-    serverInterfaceEth2 = HostInterfaceEth(hostLinuxServer, "eth5")
-    clientInterfaceEth1 = HostInterfaceEth(hostLinuxClient, "eth4")
-    clientInterfaceEth2 = HostInterfaceEth(hostLinuxClient, "eth5")
+
+    interfaces = json_file["setup"]["server_interfaces"]["value"].split(',')
+    serverInterfaceEth1 = HostInterfaceEth(hostLinuxServer, interfaces[0])
+    serverInterfaceEth2 = HostInterfaceEth(hostLinuxServer, interfaces[1])
+
+    interfaces = json_file["setup"]["client_interfaces"]["value"].split(',')
+    clientInterfaceEth1 = HostInterfaceEth(hostLinuxClient, interfaces[0])
+    clientInterfaceEth2 = HostInterfaceEth(hostLinuxClient, interfaces[1])
+
     serverHca = HostHca(hostLinuxServer, serverInterfaceEth1, serverInterfaceEth2)
     clientHca = HostHca(hostLinuxClient, clientInterfaceEth1, clientInterfaceEth2)
     setupObjTuple = (hostLinuxServer, hostLinuxClient, serverHca, clientHca)
@@ -47,9 +58,9 @@ class SomeThread(threading.Thread):
 
 
 # create HostLinux objects according the inputs, in parallel, and return the list objects to main
-def create_objects_in_parallel():
+def create_objects_in_parallel(server, client):
     setup = []
-    for host in sys.argv[1:]:  # start from the second cell - first cell contain the script name
+    for host in server, client:  # start from the second cell - first cell contain the script name
         t = SomeThread(host)
         t.start()  # execute the run() def
         setup.append(t)
