@@ -21,15 +21,15 @@ class HostLinux:
         self.machine_type = conn.modules.platform.system()  # Returns the system/OS name, e.g. 'Linux', 'Windows'
         self.processor_name = conn.modules.platform.processor()  # Returns the processor name, e.g. 'amdk6' / 'x86_64'
         self.hostname = conn.modules.platform.node()             # returns the host name, e. g 'bfhp12'
-        self.os_details = conn.modules.platform.platform(aliased=0, terse=0) # 'Linux-3.10.0-693.el7.x86_64-x86_64-with-redhat-7.4-Maipo'
-        self.linux_distribution = conn.modules.platform.linux_distribution()[0] # 'Red Hat Enterprise Linux Server'
+        self.os_details = conn.modules.platform.platform(aliased=0, terse=0)  # 'Linux-3.10.0-693.el7.x86_64-x86_64-with-redhat-7.4-Maipo'
+        self.linux_distribution = conn.modules.platform.linux_distribution()[0]  # 'Red Hat Enterprise Linux Server'
         self.ip = host_ip
 
         dictionary_data = self.collect_host_data()
         self.ofed_info = dictionary_data['ofed_info']
         self.mst_version = dictionary_data['mst_version']
         self.mst_device = dictionary_data['mst_device']
-        self.fw =   dictionary_data['fw']
+        self.fw = dictionary_data['fw']
         self.exp_rom = dictionary_data['exp_rom']
         self.pci = dictionary_data['pci']
         self.driver_mlx = dictionary_data['driver_mlx']
@@ -38,6 +38,7 @@ class HostLinux:
         self.part_number = dictionary_data['part_number']
         self.hca_pid = dictionary_data['hca_pid']
         print self
+
 
     # Getters methods
     def get_conn(self):
@@ -136,19 +137,19 @@ class HostLinux:
             utilities.reporter("Fail to start the driver: \"mst start\"", 'red')
             return None
         d = {}
+        d['mst_device'] = self.run_cmd("mst status -v", r'\W+(/dev/mst/mt\d+\_\w+\d).*', 1)
+        mst_device = d['mst_device'].lstrip()
         d['ofed_info'] = self.run_cmd("ofed_info -s", r'\w+\-(\d\.\d\-\d\.\d\.\d+\.\d)', 1)
         d['mst_version'] = self.run_cmd("mst version", r'mst\W+mft\s(\d\.\d+\.\d\-\d+).*', 1)
-        d['mst_device'] = self.run_cmd("mst status -v", r'\W+(/dev/mst/mt\d+\_\w+\d).*', 1)
-        mstDevice = d['mst_device'].lstrip()
-        d['fw'] = self.run_cmd("flint -d " + mstDevice + " q | grep -i fw | grep -i version",
+        d['fw'] = self.run_cmd("flint -d " + mst_device + " q | grep -i fw | grep -i version",
                                r'FW\sVersion\:\s+(\d{2}\.\d{2}\.\d{4})', 1)
-        d['exp_rom'] = self.run_cmd("flint -d " + mstDevice + " q | grep -i rom", r'Rom\sInfo\:\s+(.*)', 1)
+        d['exp_rom'] = self.run_cmd("flint -d " + mst_device + " q | grep -i rom", r'Rom\sInfo\:\s+(.*)', 1)
         d['pci'] = self.run_cmd("lspci | grep -i mellanox", r'^(\w{2}\:\d{2}\.\d).*', 1)
-        d['driver_mlx'] = self.run_cmd("mst status -v | grep -i " + mstDevice, r'.*(mlx\d\_0)\s+net-\w+\s+', 1)
-        d['connect_x'] = self.run_cmd("mst status -v | grep -i " + mstDevice, r'(\w+\d?)\(rev:\d+\).*', 1)
-        d['board_details'] = self.run_cmd('mlxburn -d ' + mstDevice + ' -vpd', r'.*Board\sId\s+(.*)', 1)
-        d['part_number'] = self.run_cmd('mlxburn -d ' + mstDevice + ' -vpd', r'.*Part\sNumber\s+(\w+-\w+)\s+.*', 1)
-        d['hca_pid'] = self.run_cmd('flint -d ' + mstDevice + ' q', r'.*PSID:\s+(.*)', 1)
+        d['driver_mlx'] = self.run_cmd("mst status -v | grep -i " + mst_device, r'.*(mlx\d\_0)\s+net-\w+\s+', 1)
+        d['connect_x'] = self.run_cmd("mst status -v | grep -i " + mst_device, r'(\w+\d?)\(rev:\d+\).*', 1)
+        d['board_details'] = self.run_cmd('mlxburn -d ' + mst_device + ' -vpd', r'.*Board\sId\s+(.*)', 1)
+        d['part_number'] = self.run_cmd('mlxburn -d ' + mst_device + ' -vpd', r'.*Part\sNumber\s+(\w+-\w+)\s+.*', 1)
+        d['hca_pid'] = self.run_cmd('flint -d ' + mst_device + ' q', r'.*PSID:\s+(.*)', 1)
         return d
 
     def __str__(self):
