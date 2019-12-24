@@ -1,21 +1,28 @@
 #!/usr/bin/python
+# By Eliad Avraham - eliada@mellanox.com
 from os import sys, path
-from modules import utilities
+import os
+import netifaces as net
+from pprint import pprint
 
 sys.path.append(path.dirname(path.dirname(path.abspath(__file__))))
 
 
 class HostInterfaceEth:
     def __init__(self, host_linux_obj, int_name):
-        self.int_name   = int_name
-        self.mst_device = host_linux_obj.run_cmd("mst status -v | grep -i "+int_name,
-                                                 r'.*(/dev/mst/mt.*\d)\s+\d{2}\:\d{2}\.\d.*', 1)
-        mstDevice = self.mst_device
-        self.fw   = host_linux_obj.run_cmd("flint -d " + mstDevice + " q | grep -i fw | grep -i version",
-                                                                 r'FW\sVersion\:\s+(\d{2}\.\d{2}\.\d{4})', 1)
-        self.pci        = host_linux_obj.run_cmd("mst status -v | grep -i " + int_name, r'.*(\w{2}\:\d{2}\.\d).*', 1)
-        self.driver_mlx = host_linux_obj.run_cmd("mst status -v | grep -i " + int_name, r'.*(mlx\d\_\d)\s+net-\w+\s+', 1)
-        self.connect_x  = host_linux_obj.run_cmd("mst status -v | grep -i " + int_name, r'(\w+\d?)\(rev:\d+\).*', 1)
+        interface_dic = self.collect_mlx_interfaces(int_name, host_linux_obj)
+        self.interface_name = str(int_name)
+        self.mtu = int(interface_dic['mtu'])
+        self.mac_address = interface_dic['mac_address']
+        self.speed = int(interface_dic['speed']) / 1000
+        self.current_link_width = int(interface_dic['current_link_width'])
+        self.mst_device = interface_dic['mst_device']
+        self.pci = interface_dic['pci']
+        self.driver_mlx = interface_dic['driver_mlx']
+        self.connect_x = interface_dic['connect_x']
+        self.fw = host_linux_obj.run_cmd("flint -d " + self.mst_device + " q | grep -i fw | grep -i version",
+                                         r'FW\sVersion\:\s+(\d{2}\.\d{2}\.\d{4})', 1).rstrip("\n")
+        i = 1
 
     # Getters methods
     def get_interface_name(self):
@@ -39,7 +46,16 @@ class HostInterfaceEth:
     def get_connect_x(self):
         return self.connect_x
 
-    # Setters methods
+    def collect_mlx_interfaces(self, interface, host_linux_obj):
+        d = {'mtu': host_linux_obj.run_cmd("cat /sys/class/net/" + interface + "/mtu", 0, 1).rstrip("\n"),
+             'mac_address': host_linux_obj.run_cmd("cat /sys/class/net/" + interface + "/address", 0, 1).rstrip("\n"),
+             'speed': host_linux_obj.run_cmd("cat /sys/class/net/" + interface + "/speed", 0, 1).rstrip("\n"),
+             'current_link_width': host_linux_obj.run_cmd("cat /sys/class/net/" + interface +"/device/current_link_width", 0, 1).rstrip("\n"),
+             'mst_device': host_linux_obj.run_cmd("mst status -v | grep -i " + interface, r'.*(/dev/mst/mt.*\d)\s+\d{2}\:\d{2}\.\d.*', 1),
+             'pci': host_linux_obj.run_cmd("mst status -v | grep -i " + interface, r'.*(\w{2}\:\d{2}\.\d).*', 1),
+             'driver_mlx': host_linux_obj.run_cmd("mst status -v | grep -i " + interface, r'.*(mlx\d\_\d)\s+net-\w+\s+', 1),
+             'connect_x': host_linux_obj.run_cmd("mst status -v | grep -i " + interface, r'(\w+\d?)\(rev:\d+\).*', 1)}
+        return d
 
     def __str__(self):
         return str(self.__class__) + ": " + str(self.__dict__)
