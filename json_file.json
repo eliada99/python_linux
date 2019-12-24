@@ -4,7 +4,7 @@
 			"mandatory": "yes",
 			"type": "text",
 			"comment": " hostname or ip of server  Mandatory field",
-			"value": "bfhp11"
+			"value": "bfhp12"
 		},
 		"server_pci": {
 			"mandatory": "yes",
@@ -28,7 +28,7 @@
 			"mandatory": "yes",
 			"type": "text",
 			"comment": " ",
-			"value": "bfhp12"
+			"value": "bfhp11"
 		},
 		"client_pci": {
 			"mandatory": "yes",

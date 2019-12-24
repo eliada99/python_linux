@@ -61,7 +61,7 @@ if __name__ == '__main__':
     globals.init()  # create relevant objects and save them in globals module
 
 
-    #  WIP - under my debug:
+    # WIP - under my debug:
     tests.update_setup_bluefield(globals.hostLinuxServer)
     tests.update_setup_bluefield(globals.hostLinuxClient)
 

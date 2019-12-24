@@ -1,4 +1,5 @@
 #!/usr/bin/python
+# By Eliad Avraham - eliada@mellanox.com
 from os import sys, path
 import re
 import subprocess
@@ -38,7 +39,6 @@ class HostLinux:
         self.part_number = dictionary_data['part_number']
         self.hca_pid = dictionary_data['hca_pid']
         print self
-
 
     # Getters methods
     def get_conn(self):
@@ -136,8 +136,7 @@ class HostLinux:
         if not self.run_cmd("mst start", 0, 1):
             utilities.reporter("Fail to start the driver: \"mst start\"", 'red')
             return None
-        d = {}
-        d['mst_device'] = self.run_cmd("mst status -v", r'\W+(/dev/mst/mt\d+\_\w+\d).*', 1)
+        d = {'mst_device': self.run_cmd("mst status -v", r'\W+(/dev/mst/mt\d+\_\w+\d).*', 1)}
         mst_device = d['mst_device'].lstrip()
         d['ofed_info'] = self.run_cmd("ofed_info -s", r'\w+\-(\d\.\d\-\d\.\d\.\d+\.\d)', 1)
         d['mst_version'] = self.run_cmd("mst version", r'mst\W+mft\s(\d\.\d+\.\d\-\d+).*', 1)
