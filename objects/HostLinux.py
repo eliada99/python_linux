@@ -132,6 +132,8 @@ class HostLinux:
         # if cmdStatus: return None
         if return_value: return stdout
 
+    # function: collect_host_data
+    # run commands on your host via RPyC to pull the setup details
     def collect_host_data(self):
         if not self.run_cmd("mst start", 0, 1):
             utilities.reporter("Fail to start the driver: \"mst start\"", 'red')
@@ -151,5 +153,6 @@ class HostLinux:
         d['hca_pid'] = self.run_cmd('flint -d ' + mst_device + ' q', r'.*PSID:\s+(.*)', 1)
         return d
 
+    # print object details
     def __str__(self):
         return str(self.__class__) + ": " + str(self.__dict__)
