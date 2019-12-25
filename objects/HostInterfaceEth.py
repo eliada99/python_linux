@@ -20,9 +20,8 @@ class HostInterfaceEth:
         self.pci = interface_dic['pci']
         self.driver_mlx = interface_dic['driver_mlx']
         self.connect_x = interface_dic['connect_x']
-        self.fw = host_linux_obj.run_cmd("flint -d " + self.mst_device + " q | grep -i fw | grep -i version",
+        self.fw_version = host_linux_obj.run_cmd("flint -d " + self.mst_device + " q | grep -i fw | grep -i version",
                                          r'FW\sVersion\:\s+(\d{2}\.\d{2}\.\d{4})', 1).rstrip("\n")
-        i = 1
 
     # Getters methods
     def get_interface_name(self):
@@ -31,7 +30,7 @@ class HostInterfaceEth:
     def get_mst_device(self):
         return self.mst_device
 
-    def get_fw(self):
+    def get_fw_version(self):
         return self.fw
 
     def get_pci(self):

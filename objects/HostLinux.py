@@ -30,7 +30,6 @@ class HostLinux:
         self.ofed_info = dictionary_data['ofed_info']
         self.mst_version = dictionary_data['mst_version']
         self.mst_device = dictionary_data['mst_device']
-        self.fw = dictionary_data['fw']
         self.exp_rom = dictionary_data['exp_rom']
         self.pci = dictionary_data['pci']
         self.driver_mlx = dictionary_data['driver_mlx']
@@ -73,9 +72,6 @@ class HostLinux:
 
     def get_mst_device(self):
         return self.mst_device
-
-    def get_fw(self):
-        return self.fw
 
     def get_exp_rom(self):
         return self.exp_rom
@@ -142,8 +138,6 @@ class HostLinux:
         mst_device = d['mst_device'].lstrip()
         d['ofed_info'] = self.run_cmd("ofed_info -s", r'\w+\-(\d\.\d\-\d\.\d\.\d+\.\d)', 1)
         d['mst_version'] = self.run_cmd("mst version", r'mst\W+mft\s(\d\.\d+\.\d\-\d+).*', 1)
-        d['fw'] = self.run_cmd("flint -d " + mst_device + " q | grep -i fw | grep -i version",
-                               r'FW\sVersion\:\s+(\d{2}\.\d{2}\.\d{4})', 1)
         d['exp_rom'] = self.run_cmd("flint -d " + mst_device + " q | grep -i rom", r'Rom\sInfo\:\s+(.*)', 1)
         d['pci'] = self.run_cmd("lspci | grep -i mellanox", r'^(\w{2}\:\d{2}\.\d).*', 1)
         d['driver_mlx'] = self.run_cmd("mst status -v | grep -i " + mst_device, r'.*(mlx\d\_0)\s+net-\w+\s+', 1)
