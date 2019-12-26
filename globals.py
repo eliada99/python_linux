@@ -1,15 +1,16 @@
 #!/usr/bin/python
-import sys
-import threading  # https://docs.python.org/2/library/threading.html
+import threading
 import json
 
-from objects.HostLinux import HostLinux
+from objects.host.HostLinux import HostLinux
 from objects.HostInterfaceEth import HostInterfaceEth
 from objects.HostHca import HostHca
 
 JSON_FILE = "json_file.json"
 
-'''This file is saving the mainly globals parameters in my project'''
+'''
+This file is saving the mainly globals parameters in my project
+'''
 
 
 def init():

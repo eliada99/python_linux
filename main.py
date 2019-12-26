@@ -1,10 +1,12 @@
 #!/usr/bin/python
-# By Eliad Avraham - eliada@mellanox.com
+'''
+@ By Eliad Avraham - eliada@mellanox.com / eliadush9@gmail.com / +972-5136306
+'''
 import json
 from os import sys, path
 import re
 import datetime
-import json
+import netifaces as ni
 
 # My project import
 from modules import utilities
@@ -59,23 +61,11 @@ if __name__ == '__main__':
         usage()
 
     globals.init()  # create relevant objects and save them in globals module
-
+    DaddyBreakMe = 1
 
     # WIP - under my debug:
+
     tests.update_setup_bluefield(globals.hostLinuxServer)
     tests.update_setup_bluefield(globals.hostLinuxClient)
 
-
-    ##### debug #########
-    Daddy = 1
-
-    cmd = "sleep 10"
-    out = globals.hostLinuxServer.run_cmd(cmd, "", 1, 20000)
-    # utilities.run_cmd - must to send the connection
-    output = utilities.run_cmd(globals.objectsList[0].get_conn(), "/sbin/ip link")
-    if not output:
-        raise Exception("failed to run /sbin/ip link")
-    lines = output.split("\n")
-
-    Daddy = 2
-    ##### debug #########
+    DaddyBreakMe = 2

@@ -3,8 +3,8 @@
 		"server": {
 			"mandatory": "yes",
 			"type": "text",
-			"comment": " hostname or ip of server  Mandatory field",
-			"value": "bfhp12"
+			"comment": "",
+			"value": "bfhp11"
 		},
 		"server_pci": {
 			"mandatory": "yes",
@@ -28,7 +28,7 @@
 			"mandatory": "yes",
 			"type": "text",
 			"comment": " ",
-			"value": "bfhp11"
+			"value": "bfhp12"
 		},
 		"client_pci": {
 			"mandatory": "yes",
@@ -45,7 +45,7 @@
 		"client_bluefield": {
 			"mandatory": "yes",
 			"type": "text",
-			"comment": " client arm usb interface ip - you must verify that you can enter to this ip from the client_ip (usb-host) Optional field",
+			"comment": " ",
 			"value": "192.168.100.2"
 		}
 	}
