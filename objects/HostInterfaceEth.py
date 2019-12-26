@@ -1,9 +1,6 @@
 #!/usr/bin/python
 # By Eliad Avraham - eliada@mellanox.com
 from os import sys, path
-import os
-import netifaces as net
-from pprint import pprint
 
 sys.path.append(path.dirname(path.dirname(path.abspath(__file__))))
 
@@ -22,6 +19,10 @@ class HostInterfaceEth:
         self.connect_x = interface_dic['connect_x']
         self.fw_version = host_linux_obj.run_cmd("flint -d " + self.mst_device + " q | grep -i fw | grep -i version",
                                          r'FW\sVersion\:\s+(\d{2}\.\d{2}\.\d{4})', 1).rstrip("\n")
+
+        self.ipv4 = interface_dic['IPADDR']
+        self.ipv6 = interface_dic['IPV6ADDR']
+        self.type = interface_dic['TYPE']
 
     # Getters methods
     def get_interface_name(self):
@@ -45,6 +46,15 @@ class HostInterfaceEth:
     def get_connect_x(self):
         return self.connect_x
 
+    def get_ipv4(self):
+        return self.ipv4
+
+    def get_ipv6(self):
+        return self.ipv6
+
+    def get_type(self):
+        return self.type
+
     def collect_mlx_interfaces(self, interface, host_linux_obj):
         d = {'mtu': host_linux_obj.run_cmd("cat /sys/class/net/" + interface + "/mtu", 0, 1).rstrip("\n"),
              'mac_address': host_linux_obj.run_cmd("cat /sys/class/net/" + interface + "/address", 0, 1).rstrip("\n"),
@@ -54,6 +64,14 @@ class HostInterfaceEth:
              'pci': host_linux_obj.run_cmd("mst status -v | grep -i " + interface, r'.*(\w{2}\:\d{2}\.\d).*', 1),
              'driver_mlx': host_linux_obj.run_cmd("mst status -v | grep -i " + interface, r'.*(mlx\d\_\d)\s+net-\w+\s+', 1),
              'connect_x': host_linux_obj.run_cmd("mst status -v | grep -i " + interface, r'(\w+\d?)\(rev:\d+\).*', 1)}
+        conf_file_content = host_linux_obj.run_cmd("cat /etc/sysconfig/network-scripts/ifcfg-"+interface, 0,
+                                                    1).split("\n")
+        for att in conf_file_content:
+            tmp = att.split("=")
+            if 2 > len(tmp):
+                continue
+            d[tmp[0]] = tmp[1]
+
         return d
 
     def __str__(self):
