@@ -15,13 +15,12 @@ class Host(object):
         self.last_output = None
         remote = RemoteConnection()
         conn = remote.connect(ip)
-        #conn = remote.connect_to_arm(ip)
+        # conn = remote.connect_to_arm(ip) # see limitation in ReadMe.txt file
         self.conn = None if conn is None else conn
         self.machine_type = conn.modules.platform.system()  # Returns the system/OS name, e.g. 'Linux', 'Windows'
         self.processor_name = conn.modules.platform.processor()  # Returns the processor name, e.g. 'amdk6' / 'x86_64'
         self.hostname = conn.modules.platform.node()  # returns the host name, e. g 'bfhp12'
-        self.os_details = conn.modules.platform.platform(aliased=0,
-                                                         terse=0)  # 'Linux-3.10.0-693.el7.x86_64-x86_64-with-redhat-7.4-Maipo'
+        self.os_details = conn.modules.platform.platform(aliased=0, terse=0)  # 'Linux-3.10.0-693.el7.x86_64-x86_64-with-redhat-7.4-Maipo'
         self.linux_distribution = conn.modules.platform.linux_distribution()[0]  # 'Red Hat Enterprise Linux Server'
 
     # Getters methods
@@ -49,10 +48,12 @@ class Host(object):
     def get_last_output(self):
         return self.last_output
 
-    # run command def
-    # with/without regex to pull only the needed output
-    # with/without return value
-    def run_cmd(self, cmd, reg, return_value=0, timeout=60):
+    # run command function
+    # self = remoteConnection object
+    # cmd = your command
+    # reg = with/without regex to pull only the needed output
+    # return_value = with/without return value
+    def run_cmd(self, cmd, reg, return_value=0):
         if hasattr(self, 'hostname'):
             host = self.get_hostname()
         else:
@@ -77,4 +78,5 @@ class Host(object):
                 utilities.reporter("Host: " + self.get_hostname() + "Command Fail: " + cmd + "\n" + stdout, 'red')
                 return None
         # if cmdStatus: return None
-        if return_value: return stdout
+        if return_value:
+            return stdout
