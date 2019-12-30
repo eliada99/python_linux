@@ -28,7 +28,7 @@ class HostInterfaceEth:
 
     # Getters methods
     def get_interface_name(self):
-        return self.int_name
+        return self.interface_name
 
     def get_mst_device(self):
         return self.mst_device
