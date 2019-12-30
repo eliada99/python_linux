@@ -1,7 +1,7 @@
 #!/usr/bin/python
-'''
+"""
 @ By Eliad Avraham - eliada@mellanox.com / eliadush9@gmail.com / +972-5136306
-'''
+"""
 import json
 from os import sys, path
 import re

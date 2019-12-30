@@ -1,7 +1,8 @@
 #!/usr/bin/python
+"""
+@ By Eliad Avraham - eliada@mellanox.com / eliadush9@gmail.com / +972-5136306
+"""
 from os import sys, path
-import hwinfo
-
 sys.path.append(path.dirname(path.dirname(path.abspath(__file__))))
 
 

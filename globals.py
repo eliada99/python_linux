@@ -1,4 +1,8 @@
 #!/usr/bin/python
+"""
+@ By Eliad Avraham - eliada@mellanox.com / eliadush9@gmail.com / +972-5136306
+This file is saving the mainly globals parameters in my project
+"""
 import threading
 import json
 
@@ -8,9 +12,8 @@ from objects.HostHca import HostHca
 
 JSON_FILE = "json_file.json"
 
-'''
-This file is saving the mainly globals parameters in my project
-'''
+global hostLinuxServer, hostLinuxClient, serverInterfaceEth1, serverInterfaceEth2
+global clientInterfaceEth1, clientInterfaceEth2, serverHca, clientHca, setupObjTuple
 
 
 def init():

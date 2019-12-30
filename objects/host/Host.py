@@ -1,4 +1,7 @@
 #!/usr/bin/python
+"""
+@ By Eliad Avraham - eliada@mellanox.com / eliadush9@gmail.com / +972-5136306
+"""
 import re
 import subprocess
 
@@ -12,6 +15,7 @@ class Host(object):
         self.last_output = None
         remote = RemoteConnection()
         conn = remote.connect(ip)
+        #conn = remote.connect_to_arm(ip)
         self.conn = None if conn is None else conn
         self.machine_type = conn.modules.platform.system()  # Returns the system/OS name, e.g. 'Linux', 'Windows'
         self.processor_name = conn.modules.platform.processor()  # Returns the processor name, e.g. 'amdk6' / 'x86_64'

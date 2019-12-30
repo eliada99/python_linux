@@ -1,7 +1,7 @@
 #!/usr/bin/python
-# By Eliad Avraham - eliada@mellanox.com
-import re
-import subprocess
+"""
+@ By Eliad Avraham - eliada@mellanox.com / eliadush9@gmail.com / +972-5136306
+"""
 from os import sys, path
 
 from modules import utilities
