@@ -1,16 +1,13 @@
 #!/usr/bin/python
 """
-@ By Eliad Avraham - eliada@mellanox.com / eliadush9@gmail.com / +972-5136306
+@ By Eliad Avraham - eliada@mellanox.com / eliadush9@gmail.com / +972-525136306
 """
-import json
 from os import sys, path
-import re
 import datetime
-import netifaces as ni
 
 # My project import
 from modules import utilities
-import tests
+from tests import tests
 import globals
 
 sys.path.append(path.dirname(path.dirname(path.abspath(__file__))))
@@ -46,25 +43,27 @@ def save_objects_in_file(setup):
     f.close()
 
 
-# how to..
-def usage():
-    utilities.reporter("\r\nUsage: ", 'red')
-    print("python " + sys.argv[0] + " bfdell01 10.7.15.1")
-    utilities.reporter("\r\nYou can run few servers in parallel.\r\nThen save the results in file"
-                       " or print the output in your local machine\r\n", 'red')
-    exit(2)  # close the app
-
-
 # ---------- Main code ----------
 if __name__ == '__main__':
-    if re.findall(r'-h|--help|\?', sys.argv[1]):
-        usage()
-
     globals.init()  # create relevant objects and save them in globals module
     DaddyBreakMe = 1
 
-    # WIP - under my debug:
+    # verify ping from both ports:
+    if (tests.run_ping(globals.hostLinuxClient, globals.serverInterfaceEth1,
+                       globals.clientInterfaceEth1, "ipv4") is None):
+        noPingIpv4Port_1 = 1
+    if (tests.run_ping(globals.hostLinuxClient, globals.serverInterfaceEth2,
+                       globals.clientInterfaceEth2, "ipv4") is None):
+        noPingIpv4Port_2 = 1
 
+    if (tests.run_ping(globals.hostLinuxClient, globals.serverInterfaceEth1,
+                       globals.clientInterfaceEth1, "ipv6") is None):
+        noPingIpv6Port_1 = 1
+    if (tests.run_ping(globals.hostLinuxClient, globals.serverInterfaceEth2,
+                       globals.clientInterfaceEth2, "ipv6") is None):
+        noPingIpv6Port_1 = 1
+
+    # verify ping from both ports:
     tests.update_setup_bluefield(globals.hostLinuxServer)
     tests.update_setup_bluefield(globals.hostLinuxClient)
 

@@ -1,16 +1,24 @@
 {
+	"GUI": {
+		"gui": {
+			"mandatory": "yes",
+			"type": "text",
+			"comment": "",
+			"value": "1"
+		}
+	},
 	"setup": {
 		"server": {
 			"mandatory": "yes",
 			"type": "text",
 			"comment": "",
-			"value": "bfhp11"
+			"value": "bfphy31"
 		},
 		"server_pci": {
 			"mandatory": "yes",
 			"type": "text",
 			"comment": " ",
-			"value": "07:00.0,07:00.1"
+			"value": "04:00.0,04:00.1"
 		},
 		"server_interfaces": {
 			"mandatory": "yes",
@@ -28,19 +36,19 @@
 			"mandatory": "yes",
 			"type": "text",
 			"comment": " ",
-			"value": "bfhp12"
+			"value": "bfphy07"
 		},
 		"client_pci": {
 			"mandatory": "yes",
 			"type": "text",
 			"comment": " ",
-			"value": "11:00.0,11:00.1"
+			"value": "82:00.0,82:00.1"
 		},
 		"client_interfaces": {
 			"mandatory": "yes",
 			"type": "text",
 			"comment": " ",
-			"value": "eth4,eth5"
+			"value": "eth2,eth3"
 		},
 		"client_bluefield": {
 			"mandatory": "yes",
