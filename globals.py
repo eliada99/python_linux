@@ -5,6 +5,7 @@ This file is saving the mainly globals parameters in my project
 """
 import threading
 import json
+import easygui as eg
 
 from objects.host.HostLinux import HostLinux
 from objects.HostInterfaceEth import HostInterfaceEth
@@ -14,17 +15,22 @@ JSON_FILE = "json_file.json"
 
 global hostLinuxServer, hostLinuxClient, serverInterfaceEth1, serverInterfaceEth2
 global clientInterfaceEth1, clientInterfaceEth2, serverHca, clientHca, setupObjTuple
+global testsGUI
 
 
 def init():
     # save objects as globals for all project
     global hostLinuxServer, hostLinuxClient, serverInterfaceEth1, serverInterfaceEth2
     global clientInterfaceEth1, clientInterfaceEth2, serverHca, clientHca, setupObjTuple
+    global testsGUI
     objects_list = []
 
     with open(JSON_FILE) as f:
         json_file = json.load(f)
         f.close()
+
+    if json_file["GUI"]["gui"]["value"]:
+        testsGUI = inputValidation()
 
     setup = create_objects_in_parallel(json_file["setup"]["server"]["value"], json_file["setup"]["client"]["value"])
     for i in setup:
@@ -74,3 +80,13 @@ def create_objects_in_parallel(server, client):
     print('-------- All Threads are done! ----------')
     print("-----------------------------------------\n\n")
     return setup
+
+
+def inputValidation():
+    question = "This is your question"
+    title = "This is your window title"
+    listOfOptions = ["IPv4 ping", "IPv6 ping", "Server - Driver Restart", "Client - Driver Restart", "Update Server",
+                     "Update Client"]
+    choice = eg.multchoicebox(question, title, listOfOptions)
+
+    return choice
