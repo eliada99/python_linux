@@ -45,23 +45,12 @@ def save_objects_in_file(setup):
 
 # ---------- Main code ----------
 if __name__ == '__main__':
-    globals.init()  # create relevant objects and save them in globals module
+    globals.init()
     DaddyBreakMe = 1
+    globals.runner.run_me()
+    globals.runner.display_results()
 
-    # verify ping from both ports:
-    if (tests.run_ping(globals.hostLinuxClient, globals.serverInterfaceEth1,
-                       globals.clientInterfaceEth1, "ipv4") is None):
-        noPingIpv4Port_1 = 1
-    if (tests.run_ping(globals.hostLinuxClient, globals.serverInterfaceEth2,
-                       globals.clientInterfaceEth2, "ipv4") is None):
-        noPingIpv4Port_2 = 1
 
-    if (tests.run_ping(globals.hostLinuxClient, globals.serverInterfaceEth1,
-                       globals.clientInterfaceEth1, "ipv6") is None):
-        noPingIpv6Port_1 = 1
-    if (tests.run_ping(globals.hostLinuxClient, globals.serverInterfaceEth2,
-                       globals.clientInterfaceEth2, "ipv6") is None):
-        noPingIpv6Port_1 = 1
 
     # verify ping from both ports:
     tests.update_setup_bluefield(globals.hostLinuxServer)
