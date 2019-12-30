@@ -2,6 +2,7 @@
 
 from modules import hostGetData
 import globals
+from modules import benchmark
 from modules import utilities
 
 VERSIONS_PATH = "../versions.txt"
@@ -15,22 +16,32 @@ def update_setup_bluefield(Obj):
     return
     #remoteObj.run_cmd()
 
+def ping_test_ipv4():
+    msg = ''
+    if (benchmark.run_ping(globals.hostLinuxClient, globals.serverInterfaceEth1,
+                 globals.clientInterfaceEth1, "ipv4") is None):
+        noPingIpv4Port_1 = 1
+        msg += ' ping fail from 1st port in IPv4'
+    if (benchmark.run_ping(globals.hostLinuxClient, globals.serverInterfaceEth2,
+                 globals.clientInterfaceEth2, "ipv4") is None):
+        noPingIpv4Port_2 = 1
+        msg += ' ping fail from 2nd port in IPv4'
+    if msg:
+        utilities.reporter(msg, 'red')
+        return False
+    return True
 
-# client = Host object
-# serverInt = HostInterfaceEth object
-# clientInt = HostInterfaceEth object
-# ipv = string of "ipv4" or "ipv6"
-def run_ping(client, server_int, client_nt, ipv):
-    if ipv is "ipv4":
-        server_ip = server_int.get_ipv4()
-        ping = "ping"
-    elif ipv is "ipv6":
-        server_ip = server_int.get_ipv6()
-        ping = "ping6"
-
-    cmd = ping + " -c 3 -I " + client_nt.get_interface_name() + " " + server_ip
-    try:
-        return client.run_cmd(cmd, 0, 1)
-    except:
-        utilities.reporter("Ping fail: " + cmd + "\n", 'red')
-        return None
+def ping_test_ipv6():
+    msg = ''
+    if (benchmark.run_ping(globals.hostLinuxClient, globals.serverInterfaceEth1,
+                 globals.clientInterfaceEth1, "ipv6") is None):
+        noPingIpv6Port_1 = 1
+        msg += ' ping fail from 1st port in IPv6'
+    if (benchmark.run_ping(globals.hostLinuxClient, globals.serverInterfaceEth2,
+                 globals.clientInterfaceEth2, "ipv6") is None):
+        noPingIpv6Port_1 = 1
+        msg += ' ping fail from 2nd port in IPv6'
+    if msg:
+        utilities.reporter(msg, 'red')
+        return False
+    return True
