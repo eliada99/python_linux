@@ -50,9 +50,7 @@ if __name__ == '__main__':
     globals.runner.run_me()
     globals.runner.display_results()
 
-
-
-    # verify ping from both ports:
+    # Next cases to automate:
     tests.update_setup_bluefield(globals.hostLinuxServer)
     tests.update_setup_bluefield(globals.hostLinuxClient)
 
