@@ -53,15 +53,14 @@ class Host(object):
     # cmd = your command
     # reg = with/without regex to pull only the needed output
     # return_value = with/without return value
-    def run_cmd(self, cmd, reg, return_value=0):
+    def run_cmd(self, cmd, reg, return_value=0, output_to_screen=0):
         if hasattr(self, 'hostname'):
             host = self.get_hostname()
         else:
             host = "No Name Yet"
-        utilities.reporter("Function: HostLinux.run_cmd, Object: HostLinux: " + host + "\nCommand: " + cmd + "\n",
-                           'green')
-        proc = self.conn.modules.subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-                                                  universal_newlines=True)
+        if output_to_screen: utilities.reporter("Function: HostLinux.run_cmd, Object: HostLinux: " +
+                                                host + "\nCommand: " + cmd + "\n", 'green')
+        proc = self.conn.modules.subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,universal_newlines=True)
         stdout, stderr = proc.communicate()
 
         if stderr:
@@ -69,7 +68,7 @@ class Host(object):
             self.last_output = stderr  # need to verify it
             raise Exception("failed in command: " + cmd)
             return None
-        utilities.reporter("Output of command is: " + stdout, 'blue')
+        if output_to_screen: utilities.reporter("Output of command is:\n" + stdout, 'blue')
         self.set_last_output(stdout)
         if reg:
             try:

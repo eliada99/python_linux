@@ -25,7 +25,8 @@ class HostLinux(Host):
         self.board_details = dictionary_data['board_details']
         self.part_number = dictionary_data['part_number']
         self.hca_pid = dictionary_data['hca_pid']
-        print self
+        self.uname = dictionary_data['uname']
+        self.print_me()
 
     # Getters methods
     def get_ofed_info(self):
@@ -79,8 +80,27 @@ class HostLinux(Host):
         d['board_details'] = self.run_cmd('mlxburn -d ' + mst_device + ' -vpd', r'.*Board\sId\s+(.*)', 1)
         d['part_number'] = self.run_cmd('mlxburn -d ' + mst_device + ' -vpd', r'.*Part\sNumber\s+(\w+-\w+)\s+.*', 1)
         d['hca_pid'] = self.run_cmd('flint -d ' + mst_device + ' q', r'.*PSID:\s+(.*)', 1)
+        d['uname'] = self.run_cmd('uname -a', 0, 1)
         return d
 
     # print object details
-    def __str__(self):
-        return str(self.__class__) + ": " + str(self.__dict__)
+    def print_me(self):
+        print ("------ Class " + self.__class__.__name__ + ": ------")
+        print "Hostname:    " + self.hostname + "\n" \
+              "IP:          " + self.ip + "\n" \
+              "Ofed - info: " + self.ofed_info + "\n" \
+              "MST Version: " + self.mst_version + " \n" \
+              "MST Device:  " + self.mst_device + "\n" \
+              "Pci:         " + self.pci + "\n" \
+              "Driver MLX:  " + self.driver_mlx + "\n" \
+              "ConnectX:    " + self.connect_x + "\n" \
+              "Board:       " + self.board_details + "\n" \
+              "Part_number: " + self.part_number + "\n" \
+              "HCA_pid:     " + self.hca_pid + "\n" \
+              "Machine:     " + self.machine_type + "\n" \
+              "Proc - name: " + self.processor_name + "\n" \
+              "OS_details:  " + self.os_details + "\n" \
+              "Linux_dis:   " + self.linux_distribution + "\n" \
+              "uname:   " + self.uname + "\n" \
+              "-------------------------------\n\n"
+
