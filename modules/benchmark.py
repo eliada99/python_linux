@@ -15,7 +15,7 @@ def run_ping(client, server_int, client_nt, ipv):
 
     cmd = ping + " -c 3 -I " + client_nt.get_interface_name() + " " + server_ip
     try:
-        return client.run_cmd(cmd, 0, 1)
+        return client.run_cmd(cmd, 0, 1, 1)
     except:
         utilities.reporter("Ping fail: " + cmd + "\n", 'red')
         return None
