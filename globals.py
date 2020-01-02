@@ -10,6 +10,7 @@ from objects.host.HostLinux import HostLinux
 from objects.HostInterfaceEth import HostInterfaceEth
 from objects.HostHca import HostHca
 from tests.Runner import Runner
+from modules import RunInParallel
 
 JSON_FILE = "json_file.json"
 

@@ -1,12 +1,4 @@
 {
-	"GUI": {
-		"gui": {
-			"mandatory": "yes",
-			"type": "text",
-			"comment": "",
-			"value": "1"
-		}
-	},
 	"setup": {
 		"server": {
 			"mandatory": "yes",
@@ -55,6 +47,21 @@
 			"type": "text",
 			"comment": " ",
 			"value": "192.168.100.2"
+		}
+	},
+	"GUI": {
+		"gui": {
+			"mandatory": "yes",
+			"type": "text",
+			"comment": "",
+			"value": "1"
+		}
+	},
+	"update_setup": {
+		"versions": {
+			"ofed_install_command": "build=MLNX_OFED_LINUX-4.7-3.2.7.0  /.autodirect/mswg/release/MLNX_OFED/mlnx_ofed_install --with-rshim",
+			"FW": "18_26_4010",
+			"BFB": "/auto/mswg/release/sw_mc_soc/CentOS7.5-4.20/CentOS7.5-4.20-MLNX_OFED_LINUX-UPSTREAM-LIBS-4.7-3.2.7.0.1-aarch64.bfb"
 		}
 	}
 }

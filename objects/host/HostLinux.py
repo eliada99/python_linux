@@ -101,6 +101,6 @@ class HostLinux(Host):
               "Proc - name: " + self.processor_name + "\n" \
               "OS_details:  " + self.os_details + "\n" \
               "Linux_dis:   " + self.linux_distribution + "\n" \
-              "uname:   " + self.uname + "\n" \
+              "uname:   " + self.uname + \
               "-------------------------------\n\n"
 
