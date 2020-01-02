@@ -7,7 +7,7 @@ import datetime
 
 # My project import
 from modules import utilities
-from tests import tests
+from modules import Parallel
 import globals
 
 sys.path.append(path.dirname(path.dirname(path.abspath(__file__))))
@@ -46,12 +46,19 @@ def save_objects_in_file(setup):
 # ---------- Main code ----------
 if __name__ == '__main__':
     globals.init()
+
+    ######## debug session
+    threadsList = [Parallel.RunInParallel(globals.hostLinuxClient.run_cmd,
+                                               method_param=("ofed_info -s", 0, 1, 1), timeout=1),
+                   Parallel.RunInParallel(globals.hostLinuxServer.run_cmd,
+                                               method_param=("ofed_info -s", 0, 1, 1), timeout=1)]
+    Parallel.start_and_join_list_of_threads(threadsList)
+    threadsList = Parallel.get_results(threadsList)
+    ###### end of debug session ############
+
     DaddyBreakMe = 1
     globals.runner.run_me()
     globals.runner.display_results()
 
     # Next cases to automate:
-    tests.update_setup_bluefield(globals.hostLinuxServer)
-    tests.update_setup_bluefield(globals.hostLinuxClient)
-
     DaddyBreakMe = 2
