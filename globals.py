@@ -10,13 +10,13 @@ from objects.host.HostLinux import HostLinux
 from objects.HostInterfaceEth import HostInterfaceEth
 from objects.HostHca import HostHca
 from tests.Runner import Runner
-from modules import RunInParallel
 
 JSON_FILE = "json_file.json"
 
 global hostLinuxServer, hostLinuxClient, serverInterfaceEth1, serverInterfaceEth2
 global clientInterfaceEth1, clientInterfaceEth2, serverHca, clientHca, setupObjTuple
 global runner
+
 
 def init():
     # save objects as globals for all project
