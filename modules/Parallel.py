@@ -1,6 +1,16 @@
 import time
 from threading import Thread
 
+# How to run in parallel:
+'''
+threadsList = [Parallel.RunInParallel(globals.hostLinuxServer.run_cmd,
+                                      method_param=("ofed_info -s", 0, 1, 1), timeout=1),
+               Parallel.RunInParallel(globals.hostLinuxServer.run_cmd,
+                                      method_param=("ofed_info -s", 0, 1, 1), timeout=1)]
+Parallel.start_and_join_list_of_threads(threadsList)
+threadsList = Parallel.get_results(threadsList)
+'''
+
 
 class ParallelFunctionResult:
     def __init__(self, method, result):
