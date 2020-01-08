@@ -1,4 +1,6 @@
 #!/usr/bin/python
+import re
+
 from modules import utilities
 
 
@@ -17,8 +19,11 @@ def run_ping(client, server_int, client_nt, ipv, count=3):
 
     cmd = ping + " -c " + str(count) + " -I " + client_nt.get_interface_name() + " " + server_ip
     try:
-        out, err = client.run_cmd(cmd, 0, 1, 1)
-        return out, err
+        out = client.run_cmd(cmd, r'.*\d+\spackets\stransmitted\,\s\d+\sreceived\,\s(\d+).*', 1, 1)
+        if out is '0':
+            return True
+        else:
+            return False
     except:
         utilities.reporter("Ping fail: " + cmd + "\n", 'red')
         return False
