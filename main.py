@@ -6,10 +6,7 @@ from os import sys, path
 import datetime
 # My project import
 from modules import utilities
-from modules import Parallel
 import globals
-
-from objects.host import Host
 
 sys.path.append(path.dirname(path.dirname(path.abspath(__file__))))
 
@@ -47,7 +44,5 @@ def save_objects_in_file(setup):
 # ---------- Main code ----------
 if __name__ == '__main__':
     globals.init()
-    DaddiBreakMe = 1
     globals.runner.run_me()
     globals.runner.display_results()
-    DaddiBreakMe = 2
