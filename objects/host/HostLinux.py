@@ -26,7 +26,6 @@ class HostLinux(Host):
         self.part_number = dictionary_data['part_number']
         self.hca_pid = dictionary_data['hca_pid']
         self.uname = dictionary_data['uname']
-        self.print_me()
 
     # Getters methods
     def get_ofed_info(self):
@@ -86,21 +85,22 @@ class HostLinux(Host):
     # print object details
     def print_me(self):
         print ("------ Class " + self.__class__.__name__ + ": ------")
-        print "Hostname:    " + self.hostname + "\n" \
-              "IP:          " + self.ip + "\n" \
-              "Ofed - info: " + self.ofed_info + "\n" \
-              "MST Version: " + self.mst_version + " \n" \
-              "MST Device:  " + self.mst_device + "\n" \
-              "Pci:         " + self.pci + "\n" \
-              "Driver MLX:  " + self.driver_mlx + "\n" \
-              "ConnectX:    " + self.connect_x + "\n" \
-              "Board:       " + self.board_details + "\n" \
-              "Part_number: " + self.part_number + "\n" \
-              "HCA_pid:     " + self.hca_pid + "\n" \
-              "Machine:     " + self.machine_type + "\n" \
-              "Proc - name: " + self.processor_name + "\n" \
-              "OS_details:  " + self.os_details + "\n" \
-              "Linux_dis:   " + self.linux_distribution + "\n" \
-              "uname:   " + self.uname + \
-              "-------------------------------\n\n"
+        return "-------------------------------\n"\
+               "Hostname:    " + self.hostname + "\n" \
+               "IP:          " + self.ip + "\n" \
+               "Ofed - info: " + self.ofed_info + "\n" \
+               "MST Version: " + self.mst_version + " \n" \
+               "MST Device:  " + self.mst_device + "\n" \
+               "Pci:         " + self.pci + "\n" \
+               "Driver MLX:  " + self.driver_mlx + "\n" \
+               "ConnectX:    " + self.connect_x + "\n" \
+               "Board:       " + self.board_details + "\n" \
+               "Part_number: " + self.part_number + "\n" \
+               "HCA_pid:     " + self.hca_pid + "\n" \
+               "Machine:     " + self.machine_type + "\n" \
+               "Proc - name: " + self.processor_name + "\n" \
+               "OS_details:  " + self.os_details + "\n" \
+               "Linux_dis:   " + self.linux_distribution + "\n" \
+               "uname:       " + self.uname + \
+               "-------------------------------"
 
