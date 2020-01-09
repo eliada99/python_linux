@@ -3,6 +3,7 @@
 @ By Eliad Avraham - eliada@mellanox.com / eliadush9@gmail.com / +972-5136306
 This file is saving the mainly globals parameters in my project
 """
+import datetime
 import easygui as eg
 import tests
 import globals
@@ -12,16 +13,18 @@ class Runner(object):
     _Runner_Instance = None
     tests = []
     results = []
+    start_date = datetime.datetime.now()
+    start_date = start_date.strftime("%c")
 
     def __init__(self):
-        if Runner._Runner_Instance != None:
+        if Runner._Runner_Instance is not None:
             raise Exception('Singleton Class - cant create another object!')
         question = "Choose Test - Cases:"
         title = "Mini - Runner"
-        listOfOptions = ["IPv4 ping", "IPv6 ping",
-                         "Server_Driver_Restart", "Client_Driver_Restart",
-                         "Update Server - Not Implement Yet", "Update Client - Not Implement Yet"]
-        choice = eg.multchoicebox(question, title, listOfOptions)
+        list_of_options = ["Update_Server", "Update_Client",
+                           "Server_Driver_Restart", "Client_Driver_Restart",
+                           "IPv4 ping", "IPv6 ping"]
+        choice = eg.multchoicebox(question, title, list_of_options)
 
         for test in choice:
             self.tests.append(test)
@@ -29,7 +32,7 @@ class Runner(object):
     def run_me(self):
         for test in self.tests:
             if test == 'IPv4 ping':
-                if self.ping_test_ipv4:
+                if self.ping_test_ipv4():
                     self.results.append("IPv4 ping test pass!\n")
                 else:
                     self.results.append("IPv4 ping test fail!\n")
@@ -48,8 +51,17 @@ class Runner(object):
                     self.results.append("Client - Driver Restart test pass!\n")
                 else:
                     self.results.append("Client - Driver Restart test fail!\n")
+            elif test == 'Update_Server':
+                if self.update_setup_server():
+                    self.results.append("Server - Update Driver: test pass!\n")
+                else:
+                    self.results.append("Server - Update Driver: test fail!\n")
+            elif test == 'Update_Client':
+                if self.update_setup_client():
+                    self.results.append("Client - Update Driver: test pass!\n")
+                else:
+                    self.results.append("Client - Update Driver: test fail!\n")
 
-    # @property - ?????
     def ping_test_ipv4(self):
         return tests.ping_test_ipv4()
 
@@ -62,7 +74,16 @@ class Runner(object):
     def driver_restart_server(self):
         return tests.driver_restart(globals.hostLinuxServer)
 
+    def update_setup_server(self):
+        return tests.update_setup(globals.hostLinuxServer)
+
+    def update_setup_client(self):
+        return tests.update_setup(globals.hostLinuxClient)
+
     def display_results(self):
-        msg = "Report Details:"
+        now = datetime.datetime.now()
+        now = now.strftime("%c")
+        msg = "Report Details:\nStart Date: " + self.start_date + "\nEnd Date:   " + now + "\n" +\
+              globals.hostLinuxServer.print_me() + "\n" + globals.hostLinuxClient.print_me()
         title = "Mini - Runner"
         eg.textbox(msg, title, self.results)

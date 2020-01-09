@@ -47,16 +47,16 @@ def driver_restart(host_obj):
 
 def update_setup(host_obj):
     msg = ''
-    msg2 = ''
     dic_versions = hostGetData.get_versions_from_json()
 
     try:
-        msg = host_obj.run_cmd(dic_versions["ofed_install_command"], 0, 1, 1) ####### stderr full + stdout - but install passed .. ??????
-        msg2 = driver_restart(host_obj, "restart")
+        if not hostSetData.install_driver(host_obj, dic_versions["ofed_install_command"]):
+            msg = 'fail to update setup: ' + host_obj.get_hostname()
+        if hostSetData.driver_action(host_obj, 'restart') is None:
+            msg = msg + '\n fail to restart driver'
     except:
         utilities.reporter("Install ofed fail: " + dic_versions["ofed_install_command"] + "\n", 'red')
-        return None
-
+        return False
     if msg:
         utilities.reporter(msg, 'red')
         return False
