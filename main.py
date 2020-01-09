@@ -4,7 +4,6 @@
 """
 from os import sys, path
 import datetime
-
 # My project import
 from modules import utilities
 from modules import Parallel
