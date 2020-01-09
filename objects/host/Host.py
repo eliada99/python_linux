@@ -53,29 +53,28 @@ class Host(object):
     # cmd = your command
     # reg = with/without regex to pull only the needed output
     # return_value = with/without return value
-    def run_cmd(self, cmd, reg, return_value=0, output_to_screen=0):
-        if hasattr(self, 'hostname'):
-            host = self.get_hostname()
-        else:
-            host = "No Name Yet"
+    def run_cmd(self, cmd, reg, return_value=0, output_to_screen=0, write_to_file=0):
+        if hasattr(self, 'hostname'): host = self.get_hostname()
+        else: host = "No Name Yet"
+        if write_to_file: cmd = cmd + " > " + write_to_file
         if output_to_screen: utilities.reporter("Function: HostLinux.run_cmd, Object: HostLinux: " +
                                                 host + "\nCommand: " + cmd + "\n", 'green')
-        proc = self.conn.modules.subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,universal_newlines=True)
+        proc = self.conn.modules.subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                                                  universal_newlines=True)
         stdout, stderr = proc.communicate()
-
+        if output_to_screen:
+            utilities.reporter("Output of command is:\n" + stdout, 'blue')
+            if stderr: utilities.reporter("Error output of command is:\n" + stderr, 'blue')
+        if write_to_file: return
         if stderr:
             utilities.reporter("Something went wrong: " + stderr, 'red')
-            self.last_output = stderr  # need to verify it
+            self.last_output = stderr
             raise Exception("failed in command: " + cmd)
             return None
-        if output_to_screen: utilities.reporter("Output of command is:\n" + stdout, 'blue')
         self.set_last_output(stdout)
         if reg:
-            try:
-                stdout = re.findall(reg, stdout)[0]
+            try: stdout = re.findall(reg, stdout)[0]
             except:
                 utilities.reporter("Host: " + self.get_hostname() + "Command Fail: " + cmd + "\n" + stdout, 'red')
                 return None
-        # if cmdStatus: return None
-        if return_value:
-            return stdout
+        if return_value: return stdout
