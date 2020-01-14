@@ -80,6 +80,9 @@ class Runner(object):
     def update_setup_client(self):
         return tests.update_setup(globals.hostLinuxClient)
 
+    def get_results(self):
+        return self.results
+
     def display_results(self):
         now = datetime.datetime.now()
         now = now.strftime("%c")

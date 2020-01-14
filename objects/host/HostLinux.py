@@ -85,22 +85,22 @@ class HostLinux(Host):
     # print object details
     def print_me(self):
         print ("------ Class " + self.__class__.__name__ + ": ------")
-        return "-------------------------------\n"\
-               "Hostname:    " + self.hostname + "\n" \
-               "IP:          " + self.ip + "\n" \
-               "Ofed - info: " + self.ofed_info + "\n" \
-               "MST Version: " + self.mst_version + " \n" \
-               "MST Device:  " + self.mst_device + "\n" \
-               "Pci:         " + self.pci + "\n" \
-               "Driver MLX:  " + self.driver_mlx + "\n" \
-               "ConnectX:    " + self.connect_x + "\n" \
-               "Board:       " + self.board_details + "\n" \
-               "Part_number: " + self.part_number + "\n" \
-               "HCA_pid:     " + self.hca_pid + "\n" \
-               "Machine:     " + self.machine_type + "\n" \
-               "Proc - name: " + self.processor_name + "\n" \
-               "OS_details:  " + self.os_details + "\n" \
-               "Linux_dis:   " + self.linux_distribution + "\n" \
-               "uname:       " + self.uname + \
-               "-------------------------------"
+        return "<br>-------------------------------<br>"\
+               "Hostname:    " + self.hostname + "<br>" \
+               "IP:          " + self.ip + "<br>" \
+               "Ofed - info: " + self.ofed_info + "<br>" \
+               "MST Version: " + self.mst_version + " <br>" \
+               "MST Device:  " + self.mst_device + "<br>" \
+               "Pci:         " + self.pci + "<br>" \
+               "Driver MLX:  " + self.driver_mlx + "<br>" \
+               "ConnectX:    " + self.connect_x + "<br>" \
+               "Board:       " + self.board_details + "<br>" \
+               "Part_number: " + self.part_number + "<br>" \
+               "HCA_pid:     " + self.hca_pid + "<br>" \
+               "Machine:     " + self.machine_type + "<br>" \
+               "Proc - name: " + self.processor_name + "<br>" \
+               "OS_details:  " + self.os_details + "<br>" \
+               "Linux_dis:   " + self.linux_distribution + "<br>" \
+               "uname:       " + self.uname + "<br>" \
+               "-------------------------------<br>"
 
