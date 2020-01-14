@@ -1,8 +1,13 @@
-See tha all objects classes in 'objects' folder.
-The creation start from 'globals' file - and the access to all objects:
-    Need to import the globals package
+- Project description:
+All objects classes under 'objects' folder.
+All modules classes under 'modules' folder.
+All tests under 'tests' folder.
+Json file - set your setups details.
+objects.web2.results - here we save the running results [.html file]
+
+The objects creation start from 'globals.py' - and the access to all objects: [Need to import the globals package]
     globals.<objectName> - For Example:
-        tests.update_setup_bluefield(globals.hostLinuxServer)
+    tests.update_setup_bluefield(globals.hostLinuxServer)
 
 --------------------------------------------
 List of object that created in globals file:
@@ -17,9 +22,11 @@ List of object that created in globals file:
     9. setupObjTuple = (hostLinuxServer, hostLinuxClient, serverHca, clientHca)
 --------------------------------------------
 
-############### RPyC connection ##################################
+
+Issues:
+############### RPyC connection ####################
 Pass to connect to hosts via RPyC.
-The issue is with my ARM host - python 2.7.5 is installed but no RPyC and I cant install it.
+The issue is with my BlueField OS - python 2.7.5 is installed but no RPyC and I cant install it [no access to network].
 Started to implement it here:
     RemoteConnection.connect_to_arm()
 #################################################
