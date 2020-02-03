@@ -24,9 +24,10 @@ List of object that created in globals file:
 
 
 Issues:
-############### RPyC connection ####################
+############### RPyC connection #################
 Pass to connect to hosts via RPyC.
 The issue is with my BlueField OS - python 2.7.5 is installed but no RPyC and I cant install it [no access to network].
 Started to implement it here:
-    RemoteConnection.connect_to_arm()
+    - RemoteConnection.connect_to_arm()
+    - Currently will not going to be part of this project
 #################################################
