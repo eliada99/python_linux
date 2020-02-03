@@ -10,18 +10,14 @@ from objects.web2.WebBrowserRunner import WebBrowserRunner
 
 sys.path.append(path.dirname(path.dirname(path.abspath(__file__))))
 
-
 # ---------- Main code ----------
 if __name__ == '__main__':
-    web = WebBrowserRunner()
-    globals.init()
-    globals.runner.run_me()
+    web = WebBrowserRunner()  # create the result HTML page with default content
 
-    now = datetime.datetime.now()
-    now = now.strftime("%c")
-    msg = "Report Details:<br>Start Date: " + globals.runner.start_date + "<br>End Date:    " + now + "<br>" + \
-          globals.hostLinuxServer.print_me() + "<br>" + globals.hostLinuxClient.print_me()
+    globals.init()  # collect data from servers and save them in project global objects
+    globals.runner.run_me()  # choose tests ti run and start running [via basic GUI]
 
-    web.add_content(msg, globals.runner.get_results())
+    web.add_content(globals.runner.get_results())  # cat the results and details into the HTML file
+    globals.runner.display_results(web.get_file_name())  # Show basic GUI
 
-    globals.runner.display_results()
+    DaddiBreakMe = 1
