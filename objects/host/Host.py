@@ -53,7 +53,7 @@ class Host(object):
     # cmd = your command
     # reg = with/without regex to pull only the needed output
     # return_value = with/without return value
-    def run_cmd(self, cmd, reg, return_value=0, output_to_screen=0, write_to_file=0):
+    def run_cmd(self, cmd, reg=0, return_value=0, output_to_screen=0, write_to_file=0):
         if hasattr(self, 'hostname'): host = self.get_hostname()
         else: host = "No Name Yet"
         if write_to_file: cmd = cmd + " > " + write_to_file
