@@ -1,7 +1,10 @@
 """
 @ By Eliad Avraham - eliada@mellanox.com / eliadush9@gmail.com / +972-525136306
 """
+import datetime
+
 from modules import utilities
+import globals
 
 REPORT_PATH = "objects/web2/results/"
 
@@ -34,9 +37,13 @@ class WebBrowserRunner(object):
         f.write(message)
         f.close()
 
-    def add_content(self, content, res_list):
-        f = open(self.file_name, 'w')
+    def add_content(self, res_list):
+        now = datetime.datetime.now()
+        now = now.strftime("%c")
+        content = "Report Details:<br>Start Date: " + globals.runner.start_date + "<br>End Date:    " + now + "<br>" + \
+                   globals.hostLinuxServer.print_me() + "<br>" + globals.hostLinuxClient.print_me()
 
+        f = open(self.file_name, 'w')
         message = """<html>
         <head></head>
         <body><p>"""
@@ -49,3 +56,6 @@ class WebBrowserRunner(object):
 
         f.write(message)
         f.close()
+
+    def get_file_name(self):
+        return self.file_name
