@@ -42,10 +42,3 @@ class RemoteConnection(object):
         #sock.send("cat /etc/mlnx-release")
         #sock.recv()
         '''
-
-    def async(self, conn_module):
-        try:
-            res = rpyc.async(conn_module)
-            return res
-        except Exception as e:
-            print e
