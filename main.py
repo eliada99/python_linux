@@ -7,17 +7,25 @@ import datetime
 # My project import
 import globals
 from objects.web2.WebBrowserRunner import WebBrowserRunner
+from tests import Runner
 
 sys.path.append(path.dirname(path.dirname(path.abspath(__file__))))
 
 # ---------- Main code ----------
 if __name__ == '__main__':
-    web = WebBrowserRunner()  # create the result HTML page with default content
+    web = WebBrowserRunner()
+    print WebBrowserRunner.__doc__
 
-    globals.init()  # collect data from servers and save them in project global objects
-    globals.runner.run_me()  # choose tests ti run and start running [via basic GUI]
+    globals.init()
+    print globals.init.__doc__
 
-    web.add_content(globals.runner.get_results())  # cat the results and details into the HTML file
-    globals.runner.display_results(web.get_file_name())  # Show basic GUI
+    globals.runner.run_me()
+    print globals.runner.run_me.__doc__
+
+    web.add_content(globals.runner.get_results())
+    print WebBrowserRunner.add_content.__doc__
+
+    globals.runner.display_results(web.get_file_name())
+    print globals.runner.display_results.__doc__
 
     DaddiBreakMe = 1

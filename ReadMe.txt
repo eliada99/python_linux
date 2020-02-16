@@ -1,6 +1,6 @@
 - Project description:
 All objects classes under 'objects' folder.
-All modules classes under 'modules' folder.
+All modules files under 'modules' folder.
 All tests under 'tests' folder.
 Json file - set your setups details.
 objects.web2.results - here we save the running results [.html file]

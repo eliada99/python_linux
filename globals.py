@@ -3,6 +3,7 @@
 @ By Eliad Avraham - eliada@mellanox.com / eliadush9@gmail.com / +972-5136306
 This file is saving the mainly globals parameters in my project
 """
+
 import threading
 import json
 
@@ -12,6 +13,8 @@ from objects.HostHca import HostHca
 from tests.Runner import Runner
 
 JSON_FILE = "json_file.json"
+DEFAULT_PASSWORD = '3tango'
+DEFAULT_USER = 'root'
 
 global hostLinuxServer, hostLinuxClient, serverInterfaceEth1, serverInterfaceEth2
 global clientInterfaceEth1, clientInterfaceEth2, serverHca, clientHca, setupObjTuple
@@ -19,7 +22,7 @@ global runner
 
 
 def init():
-    # save objects as globals for all project
+    """collect data from servers and save them in project global objects - get it from Json conf file"""
     global hostLinuxServer, hostLinuxClient, serverInterfaceEth1, serverInterfaceEth2
     global clientInterfaceEth1, clientInterfaceEth2, serverHca, clientHca, setupObjTuple
     global runner
