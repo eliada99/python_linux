@@ -55,7 +55,7 @@ def update_setup(host_obj):
         if hostSetData.driver_action(host_obj, 'restart') is None:
             msg = msg + '\n fail to restart driver'
     except:
-        utilities.reporter("Install ofed fail: " + dic_versions["ofed_install_command"] + "\n", 'red')
+        utilities.reporter("OFED installation failed: " + dic_versions["ofed_install_command"] + "\n", 'red')
         return False
     if msg:
         utilities.reporter(msg, 'red')
