@@ -30,6 +30,7 @@ class Runner(object):
             self.tests.append(test)
 
     def run_me(self):
+        """In function: Runner.run_me - choose tests and start running [via basic GUI]"""
         for test in self.tests:
             if test == 'IPv4 ping':
                 if self.ping_test_ipv4():
@@ -83,10 +84,10 @@ class Runner(object):
     def get_results(self):
         return self.results
 
-    def display_results(self):
+    def display_results(self, res_file):
+        """in function: Runner.display_results - Show basic GUI with the results"""
         now = datetime.datetime.now()
         now = now.strftime("%c")
-        msg = "Report Details:\nStart Date: " + self.start_date + "\nEnd Date:   " + now + "\n" +\
-              globals.hostLinuxServer.print_me() + "\n" + globals.hostLinuxClient.print_me()
+        msg = "For full results and setup details: " + res_file
         title = "Mini - Runner"
         eg.textbox(msg, title, self.results)
