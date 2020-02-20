@@ -3,13 +3,13 @@
 @ By Eliad Avraham - eliada@mellanox.com / eliadush9@gmail.com / +972-525136306
 """
 from os import sys, path
-import datetime
+
 # My project import
 import globals
 from objects.web2.WebBrowserRunner import WebBrowserRunner
-from tests import Runner
 
 sys.path.append(path.dirname(path.dirname(path.abspath(__file__))))
+
 
 # ---------- Main code ----------
 if __name__ == '__main__':
