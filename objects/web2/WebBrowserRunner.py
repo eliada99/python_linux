@@ -10,6 +10,8 @@ REPORT_PATH = "objects/web2/results/"
 
 
 class WebBrowserRunner(object):
+    """In constructor: WebBrowserRunner - create singleton object that will represent the running details and
+       TCs results"""
     _Web_Instance = None
 
     def __init__(self):
@@ -38,10 +40,12 @@ class WebBrowserRunner(object):
         f.close()
 
     def add_content(self, res_list):
+        """cat the results and details into the HTML file"""
         now = datetime.datetime.now()
         now = now.strftime("%c")
         content = "Report Details:<br>Start Date: " + globals.runner.start_date + "<br>End Date:    " + now + "<br>" + \
-                   globals.hostLinuxServer.print_me() + "<br>" + globals.hostLinuxClient.print_me()
+                  globals.hostLinuxServer.print_me() + "<br>" + \
+                  globals.hostLinuxClient.print_me()
 
         f = open(self.file_name, 'w')
         message = """<html>
