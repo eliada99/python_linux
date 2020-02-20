@@ -1,5 +1,5 @@
-import Paramiko
 import time
+import paramiko
 
 
 class SshConnection(object):
@@ -13,9 +13,9 @@ class SshConnection(object):
 
     def connect(self):
         print("connecting to device " + self.ip + " via ssh connection [Paramiko]")
-        self.ssh = Paramiko.SSHClient()
+        self.ssh = paramiko.SSHClient()
         self.ssh.load_system_host_keys()
-        self.ssh.set_missing_host_key_policy(Paramiko.AutoAddPolicy())
+        self.ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 
         try:
             self.ssh.connect(
