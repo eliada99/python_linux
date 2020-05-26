@@ -23,9 +23,13 @@ class Host(object):
         self.os_details = conn.modules.platform.platform(aliased=0, terse=0)  # 'Linux-3.10.0-693.el7.x86_64-x86_64-with-redhat-7.4-Maipo'
         self.linux_distribution = conn.modules.platform.linux_distribution()[0]  # 'Red Hat Enterprise Linux Server'
 
+
     # Getters methods
     def get_conn(self):
         return self.conn
+
+    def get_conn_ssh(self):
+        return self.conn_ssh
 
     def get_ip(self):
         return self.ip
