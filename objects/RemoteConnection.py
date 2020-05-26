@@ -3,7 +3,6 @@
 """
 import rpyc
 from modules import sshParamiko, utilities
-import socket
 
 VER_TOOLS_PATH = '/mswg/projects/ver_tools/reg2_latest/install.sh'
 
@@ -22,7 +21,7 @@ class RemoteConnection(object):
             conn = rpyc.classic.connect(ip)
             return conn
         except Exception as err:
-            ++self.recCounter
+            self.recCounter += 1
             utilities.reporter("No connection to host: " + ip + " via RPyC service.\n" +
                                "starting to install the ver_tools: " + VER_TOOLS_PATH, 'yellow')
             sshParamiko.ssh_command(str(ip), VER_TOOLS_PATH)
